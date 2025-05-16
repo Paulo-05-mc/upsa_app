@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-class SubjectListPage extends StatelessWidget {
-  const SubjectListPage({super.key});
+class SubjectPage extends StatelessWidget {
+  const SubjectPage({super.key});
 
   @override
   Widget build(BuildContext context) {
