@@ -1,31 +1,30 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/course.dart';
-import '../models/document.dart';
 
 class ApiService {
-  final String _baseUrl = 'https://tu-api.com';
+  static const String baseUrl = "https://sacate10-api.com";
 
-  Future<List<Course>> fetchCourses() async {
-    final response = await http.get(Uri.parse('$_baseUrl/courses'));
+  static Future<Map<String, dynamic>?> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
     if (response.statusCode == 200) {
-      return (json.decode(response.body) as List)
-          .map((item) => Course.fromJson(item))
-          .toList();
+      return jsonDecode(response.body);
     } else {
-      throw Exception('Error al cargar cursos');
+      return null;
     }
   }
 
-  // Método adicional para documentos (opcional)
-  Future<List<Document>> fetchDocuments() async {
-    final response = await http.get(Uri.parse('$_baseUrl/documents'));
-    if (response.statusCode == 200) {
-      return (json.decode(response.body) as List)
-          .map((item) => Document.fromJson(item))
-          .toList();
-    } else {
-      throw Exception('Error al cargar documentos');
-    }
+  static Future<bool> register(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+
+    return response.statusCode == 201;
   }
 }

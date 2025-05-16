@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'register_page.dart';
 import '../home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,15 +14,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  // Credenciales hardcodeadas (simuladas)
-  final String _mockEmail = "usuario@sacate10.com";
+  // Credenciales simuladas
+  final String _mockEmail = "usuario@sacate100.com";
   final String _mockPassword = "123456";
 
   void _login() {
+    FocusScope.of(context).unfocus(); // Cierra teclado
     if (_formKey.currentState!.validate()) {
-      // Validación simple (sin backend)
-      if (_emailController.text == _mockEmail && 
-          _passwordController.text == _mockPassword) {
+      if (_emailController.text == _mockEmail && _passwordController.text == _mockPassword) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomePage()),
@@ -37,101 +37,130 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff9f7f1),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 60),
-                // Logo y nombre de la app
-                const FlutterLogo(size: 100), // Reemplaza con tu logo
-                const SizedBox(height: 20),
-                const Text(
-                  'Sácate 10',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
-                  ),
-                ),
-                const SizedBox(height: 40),
-                // Campo de correo
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Correo electrónico',
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+      backgroundColor: const Color(0xFFF5F5F7),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Branding superior
+              Column(
+                children: const [
+                  FlutterLogo(size: 80),
+                  SizedBox(height: 16),
+                  Text(
+                    "Sácate 100",
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                      letterSpacing: -1,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Ingresa tu correo';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                // Campo de contraseña
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                  SizedBox(height: 8),
+                  Text(
+                    "Tu espacio de estudio personalizado",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Ingresa tu contraseña';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                // Botón de inicio de sesión
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _login,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      backgroundColor: Colors.deepPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                ],
+              ),
+              const SizedBox(height: 40),
+
+              // Formulario
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    // Email
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Correo electrónico',
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Ingresa tu correo';
+                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                        if (!emailRegex.hasMatch(value)) return 'Correo inválido';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Contraseña
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Contraseña',
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) return 'Ingresa tu contraseña';
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Botón Iniciar sesión
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _login,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: const Text(
+                          'Iniciar sesión',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'Iniciar sesión',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    const SizedBox(height: 16),
+
+                    // Enlace a registro
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("¿No tienes cuenta?", style: TextStyle(color: Colors.black54)),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const RegisterPage()),
+                            );
+                          },
+                          child: const Text(
+                            "¿No tienes cuenta? Regístrate aquí",
+                            style: TextStyle(color: Colors.deepPurple),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                // Botón de crear cuenta
-                TextButton(
-                  onPressed: () {
-                    // Navegar a pantalla de registro (puedes crearla después)
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Pantalla de registro en desarrollo"),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    '¿No tienes cuenta? Crea una aquí',
-                    style: TextStyle(color: Colors.deepPurple),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
