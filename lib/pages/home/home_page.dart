@@ -1,79 +1,173 @@
 import 'package:flutter/material.dart';
-import '../../models/course.dart';
-import '../../services/mock_data.dart';
-import '../../widgets/cards/course_card.dart';
-import '../../widgets/inputs/search_bar.dart';
+import '../../models/user_model.dart';
+import '../account/profile_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final AppUser user;
+
+  const HomePage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    final List<Course> myCourses = MockData.getMyCourses();
-    final List<Course> popularCourses = MockData.getPopularCourses();
-
     return Scaffold(
-      backgroundColor: const Color(0xfff9f7f1),
+      backgroundColor: const Color(0xFFF9F9FB),
       appBar: AppBar(
-        title: const Text('Mis Cursos'),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: const Text("Inicio", style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+            icon: const Icon(Icons.settings, color: Colors.black54),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+              );
+            },
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: ListView(
+          children: [
+            const Text(
+              "Empieza",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _featureCard(
+                  context,
+                  title: "Encuentra un quiz",
+                  icon: Icons.quiz_outlined,
+                  color: Colors.lightBlueAccent,
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Funcionalidad próximamente")),
+                    );
+                  },
+                ),
+                const SizedBox(width: 12),
+                _featureCard(
+                  context,
+                  title: "Preguntar a la IA",
+                  icon: Icons.camera_alt_outlined,
+                  color: Colors.pinkAccent,
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("IA integrada próximamente")),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Mis StudyLists",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            _bigCard(
+              context,
+              title: "Mis favoritos",
+              subtitle: "Pulsa para saber más",
+              icon: Icons.favorite,
+              color: Colors.orangeAccent,
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              "Seguir leyendo",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            _placeholderContent(context),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.deepPurple,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
+          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: "IA"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),
+          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: "Perfil"),
+        ],
+        onTap: (index) {
+          if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _featureCard(BuildContext context,
+      {required String title, required IconData icon, required Color color, required VoidCallback onTap}) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
           padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Column(
             children: [
-              const CustomSearchBar(),
-              const SizedBox(height: 20),
-              _buildSection('Encuentra quiz', _buildQuizSection()),
-              _buildSection('Mis cursos', _buildCourseList(myCourses)),
-              _buildSection('Seguir leyendo', _buildCourseList(popularCourses)),
+              Icon(icon, size: 32, color: color),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.black87),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, '/upload'),
-        child: const Icon(Icons.upload),
+    );
+  }
+
+  Widget _bigCard(BuildContext context,
+      {required String title, required String subtitle, required IconData icon, required Color color}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 28, color: color),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+              Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSection(String title, Widget content) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        content,
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  Widget _buildQuizSection() {
-    return Card(
-      child: ListTile(
-        leading: const Icon(Icons.auto_awesome, color: Colors.deepPurple),
-        title: const Text('Pregunta a la IA'),
-        subtitle: const Text('Obtén respuestas instantáneas'),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {}, // Navegar a IA
+  Widget _placeholderContent(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
       ),
-    );
-  }
-
-  Widget _buildCourseList(List<Course> courses) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: courses.length,
-      itemBuilder: (_, index) => CourseCard(course: courses[index]),
+      child: const Center(
+        child: Text("Inicia sesión o regístrate para continuar donde lo dejaste"),
+      ),
     );
   }
 }
