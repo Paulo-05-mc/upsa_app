@@ -1,8 +1,7 @@
-
-
 import 'package:flutter/material.dart';
 import 'register_page.dart';
 import '../home/home_page.dart';
+import '../../models/AppUser.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,9 +23,16 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).unfocus(); // Cierra teclado
     if (_formKey.currentState!.validate()) {
       if (_emailController.text == _mockEmail && _passwordController.text == _mockPassword) {
+
+        final appUser = AppUser(
+          name: "Usuario Simulado",
+          email: _emailController.text,
+          isPremium: true,
+        );
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => HomePage(user: )),
+          MaterialPageRoute(builder: (_) => HomePage(user: appUser())),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:upsa_app/models/user.dart';
 import '../account/profile_page.dart';
+import '../../models/AppUser.dart';
 
 class HomePage extends StatelessWidget {
   final User user;
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+                    MaterialPageRoute(builder: (_) => ProfilePage(user: AppUser.fromUser(user))),
                   );
                 },
               ),
@@ -132,7 +133,7 @@ class HomePage extends StatelessWidget {
           if (index == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+              MaterialPageRoute(builder: (_) => ProfilePage(user: AppUser.fromUser(user))),
             );
           }
         },
