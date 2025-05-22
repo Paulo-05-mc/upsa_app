@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/user_model.dart';
-import '../../auth/login_page.dart';
+import '../auth/login_page.dart';
+import '../../models/AppUser.dart';
+
 
 class ProfilePage extends StatelessWidget {
   final AppUser user;
