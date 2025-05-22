@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/user_model.dart';
+import 'package:upsa_app/models/user.dart';
 import '../account/profile_page.dart';
 
 class HomePage extends StatelessWidget {
-  final AppUser user;
+  final User user;
 
   const HomePage({super.key, required this.user});
 
@@ -14,28 +14,51 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const Text("Inicio", style: TextStyle(color: Colors.black)),
+        title: const Text(
+          "Inicio",
+          style: TextStyle(
+            color: Colors.deepPurple,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            letterSpacing: 1.2,
+          ),
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black54),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: CircleAvatar(
+              backgroundColor: Colors.deepPurple[50],
+              child: IconButton(
+                icon: const Icon(Icons.settings, color: Colors.deepPurple),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+                  );
+                },
+              ),
+            ),
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         child: ListView(
           children: [
-            const Text(
-              "Empieza",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              "¡Hola, ${user.name.split(' ').first}!",
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepPurple,
+              ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
+            const Text(
+              "¿Qué quieres hacer hoy?",
+              style: TextStyle(fontSize: 16, color: Colors.black54),
+            ),
+            const SizedBox(height: 24),
             Row(
               children: [
                 _featureCard(
@@ -49,7 +72,7 @@ class HomePage extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 14),
                 _featureCard(
                   context,
                   title: "Preguntar a la IA",
@@ -63,12 +86,16 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             const Text(
               "Mis StudyLists",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.deepPurple,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             _bigCard(
               context,
               title: "Mis favoritos",
@@ -76,12 +103,16 @@ class HomePage extends StatelessWidget {
               icon: Icons.favorite,
               color: Colors.orangeAccent,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
             const Text(
               "Seguir leyendo",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.deepPurple,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             _placeholderContent(context),
           ],
         ),
@@ -89,6 +120,8 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
           BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: "IA"),
@@ -113,19 +146,32 @@ class HomePage extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.all(16),
+          height: 110,
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(12),
+            color: color.withOpacity(0.18),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.08),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: color),
-              const SizedBox(height: 8),
+              Icon(icon, size: 36, color: color),
+              const SizedBox(height: 10),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
               ),
             ],
           ),
@@ -137,20 +183,44 @@ class HomePage extends StatelessWidget {
   Widget _bigCard(BuildContext context,
       {required String title, required String subtitle, required IconData icon, required Color color}) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
+        color: color.withOpacity(0.16),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.07),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
-          Icon(icon, size: 28, color: color),
-          const SizedBox(width: 12),
+          CircleAvatar(
+            backgroundColor: color.withOpacity(0.3),
+            child: Icon(icon, size: 28, color: color),
+          ),
+          const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-              Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
+              ),
             ],
           ),
         ],
@@ -160,13 +230,22 @@ class HomePage extends StatelessWidget {
 
   Widget _placeholderContent(BuildContext context) {
     return Container(
-      height: 100,
+      height: 110,
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.deepPurple.withOpacity(0.08)),
       ),
       child: const Center(
-        child: Text("Inicia sesión o regístrate para continuar donde lo dejaste"),
+        child: Text(
+          "Inicia sesión o regístrate para continuar donde lo dejaste",
+          style: TextStyle(
+            fontSize: 15,
+            color: Colors.black54,
+            fontWeight: FontWeight.w500,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }

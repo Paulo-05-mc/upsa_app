@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'register_page.dart';
 import '../home/home_page.dart';
@@ -17,14 +19,14 @@ class _LoginPageState extends State<LoginPage> {
   // Credenciales simuladas
   final String _mockEmail = "usuario@sacate100.com";
   final String _mockPassword = "123456";
-
+  
   void _login() {
     FocusScope.of(context).unfocus(); // Cierra teclado
     if (_formKey.currentState!.validate()) {
       if (_emailController.text == _mockEmail && _passwordController.text == _mockPassword) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
+          MaterialPageRoute(builder: (_) => HomePage(user: )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
