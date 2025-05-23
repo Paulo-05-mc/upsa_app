@@ -1,6 +1,6 @@
 import 'package:upsa_app/models/user.dart';
 
-class AppUser {
+class AppUser extends User {
   final String name;
   final String email;
   final bool isPremium;
@@ -8,8 +8,12 @@ class AppUser {
   AppUser({
     required this.name,
     required this.email,
-    this.isPremium = false,
-  });
+    required this.isPremium,
+  }) : super(
+          id: '',
+          email: email,
+          name: name,
+        );
 
   factory AppUser.fromUser(User user) {
     return AppUser(
